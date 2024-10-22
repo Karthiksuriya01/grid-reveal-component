@@ -3,7 +3,7 @@ import React from 'react';
 import GridRevealComponent from './Components/GridRevealComponent';
 
 const App = () => {
-  const imageFromGoogle = "image.png"; // Replace with a valid image URL
+  const imageFromGoogle = "https://i1.wp.com/otakuorbit.com/wp-content/uploads/2021/03/Screenshot-2021-03-01-153440.png?resize=1536%2C841&ssl=1"; // Replace with a valid image URL
 
 
   return (
