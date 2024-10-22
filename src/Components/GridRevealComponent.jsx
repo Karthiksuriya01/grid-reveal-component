@@ -11,7 +11,8 @@ const GridRevealComponent = ({
   delay = 100, 
   gridColor = '#fff', 
   trigger = 'LayerOnView',
-  aspectRatio = '16/9'
+  aspectRatio = '16/9',
+  animation = 'layered' // New prop for animation type
 }) => {
   const [reveal, setReveal] = useState(false);
   const { ref, inView } = useInView({ triggerOnce: true });
@@ -29,17 +30,33 @@ const GridRevealComponent = ({
     const cellsPerColumn = Math.ceil(100 / gridSize);
     const totalCells = cellsPerRow * cellsPerColumn;
 
+    const getCellDelay = (index) => {
+      switch (animation) {
+        case 'center':
+          const centerX = cellsPerRow / 2;
+          const centerY = cellsPerColumn / 2;
+          const cellX = index % cellsPerRow;
+          const cellY = Math.floor(index / cellsPerRow);
+          const distanceFromCenter = Math.sqrt(Math.pow(cellX - centerX, 2) + Math.pow(cellY - centerY, 2));
+          return distanceFromCenter * 50;
+        case 'random':
+          return Math.random() * 1000;
+        default: // 'layered'
+          return index * 20;
+      }
+    };
+
     return Array.from({ length: totalCells }, (_, index) => (
       <div
         key={index}
         style={{
           backgroundColor: gridColor,
           opacity: reveal ? 0 : 1,
-          transition: `opacity ${delay}ms ease-in-out ${index * 20}ms`
+          transition: `opacity ${delay}ms ease-in-out ${getCellDelay(index)}ms`
         }}
       />
     ));
-  }, [gridSize, gridColor, reveal, delay]);
+  }, [gridSize, gridColor, reveal, delay, animation]);
 
   return (
     <div 
